@@ -10,11 +10,12 @@
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Mot de passe">
 <button id="signup">S'inscrire</button>
-
+  
 <h2>Connexion Utilisateur</h2>
 <input id="loginEmail" type="email" placeholder="Email">
 <input id="loginPassword" type="password" placeholder="Mot de passe">
 <button id="loginUser">Connexion</button>
+<button id="loginAdmin">Connexion ADMIN</button>
 
 <script type="module">
 import { auth, db } from "./js/firebase.js";
@@ -42,6 +43,8 @@ loginUser.onclick = () => {
     .then(() => alert("Connecté"))
     .catch(e => alert(e.message));
 };
+  //LoginAdmin
+  loginAdmin.onclick = location.href='admin.html',
 </script>
 </body>
 </html>
