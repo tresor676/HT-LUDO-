@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>Dashboard Admin</h1>
+<button id="logout">Déconnexion</button>
+<table border="1" id="usersTable">
+<tr>
+<th>Email</th><th>Role</th><th>Actions</th>
+</tr>
+</table>
+
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Vérifie si admin connecté
+onAuthStateChanged(auth, user => {
+  if(!user) window.location = "login.html";
+  loadUsers();
+});
+
+// Logout
+logout.onclick = () => { signOut(auth); window.location = "login.html"; }
+
+// Charger utilisateurs
+async function loadUsers() {
+  const usersCol = collection(db, "users");
+  const usersSnap = await getDocs(usersCol);
+  const table = document.getElementById("usersTable");
+
+  usersSnap.forEach(userDoc => {
+    const data = userDoc.data();
+    const row = table.insertRow();
+    row.insertCell(0).innerText = data.email;
+    row.insertCell(1).innerText = data.role;
+    const actions = row.insertCell(2);
+
+    // Supprimer
+    const delBtn = document.createElement("button");
+    delBtn.innerText = "Supprimer";
+    delBtn.onclick = async () => { 
+      await deleteDoc(doc(db, "users", userDoc.id)); 
+      row.remove(); 
+    };
+    actions.appendChild(delBtn);
+  });
+}
+</script>
+</body>
+</html>
