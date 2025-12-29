@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Admin Login</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h2>Login Admin</h2>
+<input id="email" type="email" placeholder="Email Admin">
+<input id="password" type="password" placeholder="Mot de passe Admin">
+<button id="login">Connexion</button>
+
+<script type="module">
+import { auth } from "./js/firebase.js";
+import { signInWithEmailAndPassword } from 
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+login.onclick = () => {
+  signInWithEmailAndPassword(auth, email.value, password.value)
+    .then(() => window.location = "admin.html")
+    .catch(e => alert(e.message));
+};
+</script>
+</body>
+</html>
