@@ -2,48 +2,46 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ludo PWA</title>
-<link rel="manifest" href="manifest.json">
-<style>
-body { font-family: Arial, sans-serif; text-align: center; }
-#board {
-    display: grid;
-    grid-template-columns: repeat(15, 40px);
-    grid-template-rows: repeat(15, 40px);
-    gap: 1px;
-    margin: 20px auto;
-    width: max-content;
-}
-.cell { width: 40px; height: 40px; border: 1px solid #ccc; position: relative; }
-.red, .blue, .green, .yellow {
-    border-radius: 50%;
-    width: 30px; height: 30px; margin: auto;
-}
-.red { background-color: red; }
-.blue { background-color: blue; }
-.green { background-color: green; }
-.yellow { background-color: yellow; }
-#controls { margin-top: 20px; }
-</style>
+<title>Utilisateur</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<h2>Inscription Utilisateur</h2>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Mot de passe">
+<button id="signup">S'inscrire</button>
 
-<h1>Ludo PWA Officiel</h1>
-<div id="board"></div>
-<div id="controls">
-    <button onclick="rollDice()">Lancer le dé</button>
-    <p id="dice">Dé: 0</p>
-    <p id="info">Joueur Rouge commence</p>
-</div>
+<h2>Connexion Utilisateur</h2>
+<input id="loginEmail" type="email" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Mot de passe">
+<button id="loginUser">Connexion</button>
 
-<script src="ludo.js"></script>
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, setDoc } from 
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').then(()=>console.log('Service Worker actif'));
-}
+// Signup utilisateur
+signup.onclick = async () => {
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email.value, password.value);
+    await setDoc(doc(db, "users", userCred.user.uid), {
+      email: email.value,
+      role: "user",
+      createdAt: new Date()
+    });
+    alert("Utilisateur créé !");
+  } catch(e) { alert(e.message); }
+};
+
+// Login utilisateur
+loginUser.onclick = () => {
+  signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value)
+    .then(() => alert("Connecté"))
+    .catch(e => alert(e.message));
+};
 </script>
-
 </body>
 </html>
